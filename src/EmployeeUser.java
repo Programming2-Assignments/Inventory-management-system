@@ -21,7 +21,6 @@ public class EmployeeUser {
     public String getSearchKey(){
         return employeeId;
     }
-    public String getEmployeeId() { return employeeId; }
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getAddress() { return address; }
