@@ -1,27 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class ProductDatabase {
-    private String fileName;
-    private ArrayList<Product> records;
+public class ProductDatabase extends DataBase<Product> {
 
     public ProductDatabase(String fileName) {
-        this.fileName = fileName;
-        records = new ArrayList<>();
+        super(fileName);
     }
 
-    public void readFromFile(){
-        try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = br.readLine()) != null){
-                records.add(createRecordFrom(line));
-            }
-        }
-        catch (IOException e){
-            System.out.println("Error reading file");
-        }
-    }
-
+    @Override
     public Product createRecordFrom(String line){
 //        line=line.trim();
         String[] fields = line.split(",");
@@ -35,48 +21,14 @@ public class ProductDatabase {
         return p;
     }
 
-    public ArrayList<Product> returnAllRecords(){
-        return new ArrayList<>(records);
+    @Override
+    public String getSearchKey(Product record) {
+        return record.getSearchKey();
     }
 
-    public boolean contains(String key ){
-        for (Product p : records){
-            if(p.getSearchKey().equals(key))
-                return true;
-        }
-        return false;
+    @Override
+    public String lineRepresentation(Product record) {
+        return record.lineRepresentation();
     }
 
-    public Product getRecord(String key){
-        for (Product p : records){
-            if(p.getSearchKey().equals(key))
-                return p;
-        }
-        return null;
-    }
-
-    public void insertRecord(Product record){
-        records.add(record);
-    }
-
-    public void deleteRecord(String key){
-        boolean check = records.removeIf(p -> p.getSearchKey().equals(key));
-        if(check)
-            System.out.println("Deleted record");
-        else
-            System.out.println("Record not found");
-    }
-
-    public void saveToFile(){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))){
-            for (Product record : records){
-                bw.write(record.lineRepresentation());
-                bw.newLine();
-            }
-            System.out.println("Successfully wrote to the file");
-        }
-        catch (IOException e){
-            System.out.println("Error writing file");
-        }
-    }
 }

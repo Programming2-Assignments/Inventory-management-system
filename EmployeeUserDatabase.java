@@ -1,27 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class EmployeeUserDatabase {
-    private String fileName;
-    private ArrayList<EmployeeUser> records;
+public class EmployeeUserDatabase extends DataBase<EmployeeUser> {
 
     public EmployeeUserDatabase(String fileName) {
-        this.fileName = fileName;
-        this.records = new ArrayList<>();
+        super(fileName);
     }
 
-    public void readFromFile(){
-        try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = br.readLine()) != null){
-                records.add(createRecordFrom(line));
-            }
-        }
-        catch (IOException e){
-            System.out.println("Error reading file");
-        }
-    }
-
+    @Override
     public EmployeeUser createRecordFrom(String line){
 //        line=line.trim();
         String[] fields = line.split(",");
@@ -35,48 +21,14 @@ public class EmployeeUserDatabase {
         return eu;
     }
 
-    public ArrayList<EmployeeUser> returnAllRecords(){
-        return new ArrayList<>(records);
+    @Override
+    public String getSearchKey(EmployeeUser record) {
+        return record.getSearchKey();
     }
 
-    public boolean contains(String key ){
-        for (EmployeeUser eu : records){
-            if(eu.getSearchKey().equals(key))
-                return true;
-        }
-        return false;
+    @Override
+    public String lineRepresentation(EmployeeUser record) {
+        return record.lineRepresentation();
     }
 
-    public EmployeeUser getRecord(String key){
-        for (EmployeeUser eu : records){
-            if(eu.getSearchKey().equals(key))
-                return eu;
-        }
-        return null;
-    }
-
-    public void insertRecord(EmployeeUser record){
-        records.add(record);
-    }
-
-    public void deleteRecord(String key){
-        boolean check = records.removeIf(eu -> eu.getSearchKey().equals(key));
-        if(check)
-            System.out.println("Deleted record");
-        else
-            System.out.println("Record not found");
-    }
-
-    public void saveToFile(){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))){
-            for (EmployeeUser record : records){
-                bw.write(record.lineRepresentation());
-                bw.newLine();
-            }
-            System.out.println("Successfully wrote to the file");
-        }
-        catch (IOException e){
-            System.out.println("Error writing file");
-        }
-    }
 }
