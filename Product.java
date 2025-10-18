@@ -29,6 +29,10 @@ public class Product {
         return quantity;
     }
 
+    public float getPrice() {
+        return price;
+    }
+
     // Returns the product id
     public String getSearchKey() {
         return productID;
@@ -37,6 +41,10 @@ public class Product {
     // Setters
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     // Method
