@@ -15,12 +15,13 @@ public class EmployeeUser {
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
-    public String lineRepresentation(){
+        public String lineRepresentation(){
         return String.join(",",employeeId,name,email,address,phoneNumber);
     }
     public String getSearchKey(){
         return employeeId;
     }
+
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getAddress() { return address; }
