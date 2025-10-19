@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class EmployeeRole {
     private ProductDatabase productsDatabase;
@@ -12,21 +13,27 @@ public class EmployeeRole {
         this.customerProductDatabase = new CustomerProductDatabase("CustomersProducts.txt");
         customerProductDatabase.readFromFile();
     }
-    public void addProduct(String productID, String productName, String manufacturerName, String supplierName, int quantity)
+    public void addProduct(String productID, String productName, String manufacturerName, String supplierName, int quantity , float price)
     {
-        Product temp = new Product(productID, productName,manufacturerName,supplierName,quantity, 0.0F);
-        productsDatabase.insertRecord(temp);
-        productsDatabase.saveToFile();
+        Product temp = new Product(productID, productName,manufacturerName,supplierName,quantity, price);
+        System.out.println("checking if the product exist .");
+        if(!productsDatabase.contains(productID))
+        {
+            productsDatabase.insertRecord(temp);
+            System.out.println("the product is added succesfully !");
+        }
+        else
+        {
+            System.out.println("the product already exists !");
+        }
     }
     public Product[] getListOfProducts()
     {
-        productsDatabase.readFromFile();
         ArrayList<Product> temp = productsDatabase.returnAllRecords();
         return temp.toArray(new Product[0]);
     }
     public CustomerProduct[] getListOfPurchasingOperations()
     {
-        customerProductDatabase.readFromFile();
         ArrayList<CustomerProduct> list = customerProductDatabase.returnAllRecords();
         return list.toArray(new CustomerProduct[0]);
     }
@@ -44,7 +51,6 @@ public class EmployeeRole {
         customerProductDatabase.saveToFile();
         productsDatabase.deleteRecord(p.getSearchKey());
         productsDatabase.insertRecord(p);
-        productsDatabase.saveToFile();
         return true;
     }
     public double returnProduct(String customerSSN, String productID,LocalDate purchaseDate ,LocalDate returnDate)
@@ -61,7 +67,7 @@ public class EmployeeRole {
         String key = customerSSN + "," + productID + "," + purchaseDate.format(fmt);
         if (!customerProductDatabase.contains(key)) return -1;
 
-        int days = isbetween( purchaseDate , returnDate );
+        long days = ChronoUnit.DAYS.between(purchaseDate, returnDate);
         if(days>14){return -1;}
 
         p.setQuantity(p.getQuantity()+1);
@@ -69,8 +75,6 @@ public class EmployeeRole {
         productsDatabase.insertRecord(p);
         customerProductDatabase.deleteRecord(key);
 
-        productsDatabase.saveToFile();
-        customerProductDatabase.saveToFile();
         return p.getPrice();
     }
 
@@ -99,21 +103,4 @@ public class EmployeeRole {
         productsDatabase.saveToFile();
     }
 
-    public static int isbetween(LocalDate date1, LocalDate date2)
-    {
-        String[] t1 = date1.toString().split(",");
-        String[] t2 = date2.toString().split(",");
-
-        int d1 = Integer.parseInt(t1[0]);
-        int d2 = Integer.parseInt(t2[0]);
-
-        int m1 = Integer.parseInt(t1[1]);
-        int m2 = Integer.parseInt(t2[1]);
-
-        int y1 = Integer.parseInt(t1[2]);
-        int y2 = Integer.parseInt(t2[2]);
-
-        int days = (y2 - y1) * 365 + (m2 - m1) * 30 + (d2 - d1);
-        return days;
-    }
 }

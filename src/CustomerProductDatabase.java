@@ -1,10 +1,12 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class CustomerProductDatabase extends DataBase<CustomerProduct> {
 
     CustomerProductDatabase(String fileName) {
         super(fileName);
     }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @Override
     public CustomerProduct createRecordFrom(String line){
@@ -12,7 +14,7 @@ public class CustomerProductDatabase extends DataBase<CustomerProduct> {
         String[] fields = line.split(",");
         String customerSSN = fields[0];
         String productID = fields[1];
-        LocalDate purchaseDate = LocalDate.parse(fields[3]);
+        LocalDate purchaseDate = LocalDate.parse(fields[2].trim(), formatter);
         CustomerProduct cp = new CustomerProduct(customerSSN,productID,purchaseDate);
         return cp;
     }
