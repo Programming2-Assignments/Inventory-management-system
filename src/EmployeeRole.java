@@ -13,14 +13,13 @@ public class EmployeeRole {
         this.customerProductDatabase = new CustomerProductDatabase("CustomersProducts.txt");
         customerProductDatabase.readFromFile();
     }
-    public void addProduct(String productID, String productName, String manufacturerName, String supplierName, int quantity)
+    public void addProduct(String productID, String productName, String manufacturerName, String supplierName, int quantity , float price)
     {
-        Product temp = new Product(productID, productName,manufacturerName,supplierName,quantity, 0.0F);
+        Product temp = new Product(productID, productName,manufacturerName,supplierName,quantity, price);
         System.out.println("checking if the product exist .");
         if(!productsDatabase.contains(productID))
         {
             productsDatabase.insertRecord(temp);
-            productsDatabase.saveToFile();
             System.out.println("the product is added succesfully !");
         }
         else
