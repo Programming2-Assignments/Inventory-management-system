@@ -29,22 +29,22 @@ public class Product {
         return quantity;
     }
 
-    public float getPrice() {
-        return price;
-    }
-
     // Returns the product id
     public String getSearchKey() {
         return productID;
     }
 
-    // Setters
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public float getPrice() {
+        return price;
     }
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    // Setters
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     // Method
